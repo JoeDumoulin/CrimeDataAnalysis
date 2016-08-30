@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+*.Rproj
+Data/
+
+# these are should all be reproducible/rendered from any scripts 
+# or .Rmd files
+*.pdf
+*.tex
+*.html

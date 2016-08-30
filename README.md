@@ -9,6 +9,23 @@ Supporting data can be found at https://my.spokanecity.org/opendata/gis/data/
 
 There is also a website called "CrimeWatch" that seems to have  a lot of data, but we do not know if it is accessible right now (or if we even need it).
 
+The [National Archive of Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/NACJD/NIBRS/) maintains copies of NIBRS data files from 2010-2014. 
+
+ - [https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128](https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128)
+ 
+ 
+
+## Getting Started
+
+__First, make sure you fork the project on Github__
+
+Clone the project in RStudio. After you make your additions and changes, make sure to push them back to your repository. 
+
+When you are ready to share something with the group, send a 'Pull Request' in Github to Joe, who will merge your changes with the original project. We can then update our 'forked' repos from the original project. 
+
+If you need help getting RStudio and git installed, the  [Using Version Control with RStudio](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN) tutorial will help.
+
+
 
 ### Questions
 
