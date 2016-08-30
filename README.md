@@ -9,6 +9,12 @@ Supporting data can be found at https://my.spokanecity.org/opendata/gis/data/
 
 There is also a website called "CrimeWatch" that seems to have  a lot of data, but we do not know if it is accessible right now (or if we even need it).
 
+The [National Archive of Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/NACJD/NIBRS/) maintains copies of NIBRS data files from 2010-2014. 
+
+ - [https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128](https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128)
+ 
+ 
+
 ## Getting Started
 
 __First, make sure you fork the project on Github__
