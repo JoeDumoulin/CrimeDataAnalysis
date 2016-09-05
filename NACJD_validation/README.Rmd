@@ -1,0 +1,142 @@
+---
+title: "Does the NACJD include Spokane data?"
+author: "Rollie Parrish <rparrish@flightweb.com>"
+date: "2016-08-29"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(readr)
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The [National Archive of Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/NACJD/NIBRS/) (NACJD) contains incident-level data files from the National Incident Based Reporting System (NIBRS) from 2010 to 2014. However, it is unknown whether or not data from Spokane is included in those files. 
+
+## Getting the data
+
+Downloading the public data files requires a free account on the NACJD website. The 'Terms of Use' specifies that the public data files may not be redistributed except in certain circumstances. 
+
+> Redistribution of Data
+> 
+> You agree not to redistribute data or other materials without the written agreement of ICPSR, unless:
+> 
+> You serve as the OFFICIAL or DESIGNATED REPRESENTATIVE at an ICPSR MEMBER INSTITUTION and are assisting AUTHORIZED USERS with obtaining data, or
+> 
+> You are collaborating with other AUTHORIZED USERS to analyze the data for research or instructional purposes.
+> 
+> When sharing data or other materials in these approved ways, you must include all accompanying files with the data, including terms of use. More information on permission to redistribute data can be found on the ICPSR Web site.
+
+Although the intended use with the INRUG group qualifies with the terms of use, sharing the data via a publicly accessible GitHub repository does not. Therefore, the raw data files were saved to a `/Data` subfolder. That folder was added to main repository .gitignore file. This prevents the contents of `/Data` from being included in the git repository. 
+
+### Steps to Download data
+
+#### NIBRS Data
+1. Logon to your NACJD account
+2. Go to [http://www.icpsr.umich.edu/icpsrweb/NACJD/studies/36398](http://www.icpsr.umich.edu/icpsrweb/NACJD/studies/36398)
+3. Click the 'Quick Download' button (upper left corner) and select ASCII
+4. Agree to the Terms of Use
+5. Save the ICPSR_36398I.zip file to `/Data` folder
+
+#### Law Enforcement Agency Identity (LEAI) crosswalk files
+6. Go to [https://www.icpsr.umich.edu/icpsrweb/NACJD/series/366/studies/35158?paging.startRow=1](https://www.icpsr.umich.edu/icpsrweb/NACJD/series/366/studies/35158?paging.startRow=1)
+7. Click 'Excel/TSV' in the download section
+8. Save the ICPSR_35158.zip file to the `/Data` folder
+
+### Load data into R
+```{r zip list}
+# list the files in the incident zip archive
+unzip("../Data/ICPSR_36398.zip", list = TRUE)
+
+incident_filenames <- 
+        c("ICPSR_36398/36398-Codebook.pdf",
+          "ICPSR_36398/DS0001/36398-0001-Data.txt", 
+          "ICPSR_36398/DS0002/36398-0002-Data.txt")
+
+# list the files in the ORI (agency) zip archive
+unzip("../Data/ICPSR_35158.zip", list = TRUE)
+agency_filenames <- c("ICPSR_35158/DS0001/35158-0001-Data.tsv")
+
+```
+
+According to the 36398 Codebook, the agency info is in the Batch Header Segment (36398-0001-Data.txt) and incident info is in the Administrative Segment (36398-0002-Data.txt). However, to get the actual agency names, we'll need to join this data with the LEAI crosswalk data file. This will be enough to determine which agencies in Spokane County submit NIBRS incident-level data. 
+
+```{r manifest, cache = TRUE}
+
+# agency data
+unzip("../Data/ICPSR_35158.zip", files = agency_filenames)
+
+agencies <- 
+        read_tsv("ICPSR_35158/DS0001/35158-0001-Data.tsv") %>%
+        mutate_each(funs(trimws))
+
+# incident data
+unzip("../Data/ICPSR_36398.zip", files = incident_filenames)
+
+# attempt to determine column breaks automatically - didn't work
+# header_cols <- fwf_empty("ICPSR_36398/DS0001/36398-0001-Data.txt")
+# header <- read_fwf("ICPSR_36398/DS0001/36398-0001-Data.txt", header_cols)
+
+# manually
+header_cols <-
+        fwf_positions(
+                c(3,5,34,42,72,74,97,106,115,228,230), 
+                c(4,13,41,71,73,75,97,114,117,229,233),
+                c("state_code", "agency_id", "date_nibrs", "city", "state", "population_group", 
+                  "nibrs_flag", "population", "county", "months_submitted", "year")
+        )
+
+header <- 
+        read_fwf("ICPSR_36398/DS0001/36398-0001-Data.txt", header_cols)
+
+admin_cols <- 
+        fwf_positions(
+                c(5,14,26),
+                c(13,25,33),
+                c("agency_id", "incident_number", "incident_date" )
+                )
+
+## this is a large file (299 MB with over 4 million rows)
+admin <- 
+        read_fwf("ICPSR_36398/DS0002/36398-0002-Data.txt", admin_cols)
+
+## cleanup - remove the temp files
+unlink(agency_filenames)
+unlink(incident_filenames)
+
+```
+
+```{r}
+
+spokane_agencies <- 
+        agencies %>%
+        filter(COUNTYNAME == "SPOKANE") %>%
+        select(ORI9, NAME, ADDRESS_CITY, ADDRESS_STATE)
+
+spokane_header <-
+        header %>%
+        inner_join(spokane_agencies, by = c("agency_id" = "ORI9")) %>%
+        select(agency_id, NAME, city, state, nibrs_flag, date_nibrs, population ) %>%
+        arrange(desc(population))
+
+```
+
+The Agency, Batch Header Segment and Admin Segment files were extracted from .zip archives to temporary folders. The Agency file was read using `readr::read_tsv` and the Segment files were read into R using `readr::read_fsf()`. The Agency and Batch Header data sets were merged using the Originating Agency Identifier (ORI) field. 
+
+## Results 
+
+The largest and smallest agencies did not submit NIBRS data in 2014. 
+
+```{r results}
+
+kable(spokane_header, format = "html", 
+      caption = "NIBRS flag: A = Active, NA = Not Available")
+
+```
+
+
+
+
+
