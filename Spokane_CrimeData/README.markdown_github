@@ -1,0 +1,29 @@
+Spokane Crime Data
+================
+
+This walkthrough shows the steps needed to convert the Spokane Crime Data into a final dataset that is suitable for analysis. The R code is based on the `basecode.R` script by @kmigori.
+
+Raw data files
+--------------
+
+The raw data files can be manually downloaded using this link:
+
+<https://static.spokanecity.org/download/gistransfer/pubdata/Crime.zip>
+
+Alternatively, you can enter the following into the R console.
+
+    library(httr)  
+    url <- "https://static.spokanecity.org/download/gistransfer/pubdata/Crime.zip"  
+    GET(url, write_disk("Data/Crime.zip", overwrite=TRUE))  
+
+Either way, the .zip file should be saved in the /Data folder in the repository's root directory.
+
+Inspect the .zip archive
+------------------------
+
+The resulting .zip file can be inspected manually, or a list of contents can be viewed at the console using this code. \`\`\`{r inspect zip, echo = TRUE, eval = TRUE} unzip("Data/Crime.zip", list = TRUE)
+
+\`\`\`
+
+Load and clean the data
+-----------------------
