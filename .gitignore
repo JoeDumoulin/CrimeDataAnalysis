@@ -5,8 +5,9 @@
 
 *.Rproj
 Data/
+*_cache*
 
-# these are should all be reproducible/rendered from any scripts 
+# these are should all be reproducible/rendered from any scripts
 # or .Rmd files
 *.pdf
 *.tex

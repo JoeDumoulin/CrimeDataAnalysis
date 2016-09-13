@@ -9,9 +9,11 @@ Supporting data can be found at https://my.spokanecity.org/opendata/gis/data/
 
 There is also a website called "CrimeWatch" that seems to have  a lot of data, but we do not know if it is accessible right now (or if we even need it).
 
-The [National Archive of Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/NACJD/NIBRS/) maintains copies of NIBRS data files from 2010-2014. 
+The NACJD [National Archive of Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/NACJD/NIBRS/) maintains copies of NIBRS data files from 2010-2014. However, only a few agencies in Spokane County submit the incident-level NIBRS data.  
 
+ - ["Does the NACJD include Spokane data?"](/NACJD_validation/README.md)
  - [https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128](https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128)
+ 
  
  
 
