@@ -1,0 +1,52 @@
+---
+title: "Spokane Crime"
+author: "Vivek Patil"
+date: "September 24, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Reading data
+
+```{r}
+# Arrive at Crime_byNeighborhood using earlier code that was originated by Krisztian
+crimedfonly=data.frame(Crime_byNeighborhood)
+save(crimedfonly,file="Data/Crime_byNeighborhood.Rda")
+
+load("Data/Crime_byNeighborhood.Rda")
+str(crimedfonly)
+```
+
+# Some libraries
+
+```{r}
+library(ggplot2)
+library(plotly)
+
+```
+
+# Total offenses
+
+```{r}
+crimedfonly %>% group_by(OFFGEN)%>%summarise(Counts=length(OFFGEN))%>% ggplot(.,aes(reorder(OFFGEN,Counts),Counts))+geom_bar(stat="identity")+geom_text(aes(x=OFFGEN,y=Counts+2000,label=Counts))+coord_flip()+theme_bw()+labs(y="Count",x="")
+
+```
+
+# Number of times offenses occured in different neighborhoods
+
+```{r}
+
+crimedfonly %>% group_by(Name)%>%summarise(Counts=length(Name))%>%filter(Name!="")%>% ggplot(.,aes(reorder(Name,Counts),Counts))+geom_bar(stat="identity")+geom_text(aes(x=Name,y=Counts+1000,label=Counts))+coord_flip()+theme_bw()+labs(y="Count",x="")
+```
+
+## Offenses in different neighborhoods
+
+```{r}
+
+crimedfonly %>% group_by(Name,OFFGEN)%>%summarise(Counts=length(OFFGEN))%>%filter(Name!="")%>% ggplot(.,aes(OFFGEN,Counts))+geom_bar(stat="identity")+facet_wrap(~Name,scales="free")
+
+```
+
