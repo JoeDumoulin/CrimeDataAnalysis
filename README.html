@@ -215,12 +215,6 @@ $(document).ready(function () {
 <li><a href="/NACJD_validation/README.md">“Does the NACJD include Spokane data?”</a></li>
 <li><a href="https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128" class="uri">https://www.icpsr.umich.edu/icpsrweb/NACJD/series/128</a></li>
 </ul>
-<div id="getting-started" class="section level2">
-<h2>Getting Started</h2>
-<p><strong>First, make sure you fork the project on Github</strong></p>
-<p>Clone the project in RStudio. After you make your additions and changes, make sure to push them back to your repository.</p>
-<p>When you are ready to share something with the group, send a ‘Pull Request’ in Github to Joe, who will merge your changes with the original project. We can then update our ‘forked’ repos from the original project.</p>
-<p>If you need help getting RStudio and git installed, the <a href="https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN">Using Version Control with RStudio</a> tutorial will help.</p>
 <div id="questions" class="section level3">
 <h3>Questions</h3>
 <p>Some possible questions with the dataset we agreed on include:</p>
@@ -239,6 +233,26 @@ $(document).ready(function () {
 <li>Can we do some sort of time series analysis (ie ARIMA)</li>
 </ul>
 </div>
+<div id="getting-started" class="section level2">
+<h2>Getting Started</h2>
+<p><strong>First, make sure you fork the project on Github</strong></p>
+<p>Clone the project in RStudio. After you make your additions and changes, make sure to push them back to your repository.</p>
+<p>When you are ready to share something with the group, send a ‘Pull Request’ in Github to Joe, who will merge your changes with the original project. We can then update our ‘forked’ repos from the original project.</p>
+<p>If you need help getting RStudio and git installed, the <a href="https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN">Using Version Control with RStudio</a> tutorial will help.</p>
+</div>
+<div id="using-sub-folders" class="section level2">
+<h2>Using sub-folders</h2>
+<p>In order to keep things organized, please create a sub-folder for each analysis or sub-project. These will hold all the R scripts, .Rmarkdown files and any other rendered reports used in your analysis. The final analysis should be rendered as an html_document within each sub-folder.</p>
+<p>Data files should be kept in a <code>/Data</code> folder under the repository’s top folder. This will facilitate using the same data files. The <code>/Data</code> folder and contents are listed in the .gitignore file, which prevents them from appearing in the GitHub repository.</p>
+</div>
+<div id="publishing-an-html-report" class="section level2">
+<h2>Publishing an HTML report</h2>
+<p>The project has a web site located at <a href="https://JoeDumoulin.github.io/CrimeDataAnalysis/" class="uri">https://JoeDumoulin.github.io/CrimeDataAnalysis/</a>. The site pages are built using the new <code>render_site()</code> functionality in RStudio Preview (1.0+). More information is available on the <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html">R Markdown Websites page.</a></p>
+<p>Links to your analysis can be added to the project page by:</p>
+<ol style="list-style-type: decimal">
+<li><p>Adding a link yourself. Just edit the ‘Index.Rmd’ file located in the repository root folder. Then use the <code>render_site()</code> function to re-build the index.html file. Send a pull request to Joe to merge your changes. This requires RStudio 1.0+ or higher.</p></li>
+<li><p><a href="https://github.com/JoeDumoulin/CrimeDataAnalysis/issues">Posting an issue</a> to the main project repository. One of the team members with a newer version of RStudio can then add the link for you.</p></li>
+</ol>
 </div>
 </div>
 
