@@ -1,0 +1,20 @@
+name: "Spokane Crime Data Analysis"
+navbar:
+  title: "Spokane Crime Data Analysis"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "GitHub Repository"
+      href: https://github.com/JoeDumoulin/CrimeDataAnalysis
+    - text: INRUG
+      href: http://www.meetup.com/Inland-Northwest-R-User-Group-INRUG/
+output_dir: "."
+output:
+  html_document:
+    theme: flatly
+    highlight: textmate
+    include:
+      #after_body: footer.html
+    css: styles.css
+    
+    

@@ -1,0 +1,24 @@
+---
+title: "Spokane Crime Data Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+INRUG members are working on a project to see what sort of conclusions can be drawn from public GIS and crime data from Spokane Washington.
+
+## Data Sources
+
+Supporting data can be found at https://my.spokanecity.org/opendata/gis/data/
+
+## Reports
+
+<!-- (Subfolder Report title)[path_to_subfolder/readme.html] -->
+
+## Resources
+
+[Spokane Crime Data](Spokane_CrimeData/README.html) - How to get the raw data used in this project. 
+
+
