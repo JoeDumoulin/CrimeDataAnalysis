@@ -1,0 +1,21 @@
+---
+title: "Spokane Crime Location by Year"
+output: html_document
+---
+```{r}
+library(maps)
+library(ggmap)
+library(lubridate)
+library(dplyr)
+
+county_map <- map_data("county")
+state_map <- map_data("state")
+
+
+crime <- tbl_df(data.frame(Crime_byNeighborhood)) %>% 
+  mutate(BEGINDATE = as.Date(BEGINDATE,format="%Y/%m/%d"),
+         ENDDATE = as.Date(ENDDATE,format="%Y/%m/%d"),
+         year = year(BEGINDATE))
++ coord_map("polyconic")
+ggplot(county_map[county_map$subregion=="spokane",],aes(x=long, y=lat)) + geom_polygon(colour="grey",fill="grey")  + geom_point(data=crime %>% filter(year>2007) %>% sample_n(20000),aes(Lng,Lat,colour=OFFGEN)) + facet_wrap(~year)
+```
