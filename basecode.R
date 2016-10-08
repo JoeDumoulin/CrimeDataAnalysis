@@ -13,4 +13,4 @@ Crime_byNeighborhood=over(Crime,Neighborhood)
 #appending rest of data to each point
 Crime_byNeighborhood=spCbind(Crime,Crime_byNeighborhood)
 #saving resulting dataset as csv
-write.csv(file="Spokane_CrimeData_Neighborhood.csv",Crime_byNeighborhood)
+write.csv(file="/Data/Spokane_CrimeData_Neighborhood.csv",Crime_byNeighborhood)

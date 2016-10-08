@@ -3,6 +3,11 @@ title: "Spokane Crime Location by Year"
 output: html_document
 ---
 ```{r}
+if(file.exists('../Data/Spokane_CrimeData_neighborhood.csv')){
+  Crime_byNeighborhood <- read.csv('../Data/Spokane_CrimeData_neighborhood.csv')
+} else {
+  print("Need to create crimedata")
+}
 library(maps)
 library(ggmap)
 library(lubridate)
