@@ -4,7 +4,7 @@
 .Ruserdata
 
 *.Rproj
-Data/*
+Data/*.*
 *_cache*
 
 # these are should all be reproducible/rendered from any scripts
@@ -13,4 +13,4 @@ Data/*
 *.tex
 
 # exceptions
-Data/spokanepolicestations.csv
+!Data/spokanepolicestations.csv
