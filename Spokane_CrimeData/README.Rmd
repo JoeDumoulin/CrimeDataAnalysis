@@ -1,6 +1,6 @@
 ---
 title: "Spokane Crime Data"
-output: github_document
+output: html_document
 ---
 
 ```{r setup}
@@ -24,7 +24,7 @@ library(httr)
 crime_url <- "https://static.spokanecity.org/download/gistransfer/pubdata/Crime.zip"  
 neighborhood_url <- "https://static.spokanecity.org/download/gistransfer/pubdata/Neighborhood.zip"  
 
-GET(crime_url, write_disk("Data/Crime.zip", overwrite=TRUE))  
+GET(crime_url, write_disk("Data/Crime.zip", overwrite=FALSE))  
 GET(neighborhood_url, write_disk("Data/Neighborhood.zip", overwrite=TRUE))  
 
 
