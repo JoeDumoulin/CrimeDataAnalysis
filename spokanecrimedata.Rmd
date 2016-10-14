@@ -27,6 +27,8 @@ str(crimedfonly)
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(lubridate))
+library(leaflet)
+library(ggmap)
 
 ```
 
@@ -79,6 +81,41 @@ crimedfonly$durationdays= (as.duration(ymd(crimedfonly$ENDDATE)-ymd(crimedfonly$
 
 head(crimedfonly)
 
+```
+
+```{r eval=FALSE}
+crimedfonly=crimedfonly[!is.na(crimedfonly$Lat),]
+crimedfonly=crimedfonly[!is.na(crimedfonly$Lng),]
+crime2008=crimedfonly[crimedfonly$beginyear==2008,]
+
+location=c(-117.402209,47.665330)
+map=get_map(location,source="osm", color="bw",zoom=11)
+
+for (i in 1:10){
+
+  
+crimedfsub=crimedfonly[crimedfonly$OFFGEN==levels(crimedfonly$OFFGEN)[i],]
+ggmap(map)+geom_point(data=crimedfsub,aes(Lng,Lat),color="red")+facet_wrap(~beginyear)+theme(panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                axis.text = element_blank(),axis.title = element_blank(),
+                axis.ticks = element_blank())+ggtitle(paste(levels(crimedfonly$OFFGEN)[i],"Over the Years"))
+
+ggsave(file=paste("annualplot",i,".png",sep=""),scale=4)
+}
+                                                      
+```
+
+
+
+
+
+```{r eval=FALSE}
+pal <- colorFactor(rainbow(10), domain = levels(crime2008$OFFGEN))
+crimedfonly=crimedfonly[!is.na(crimedfonly$Lat),]
+crimedfonly=crimedfonly[!is.na(crimedfonly$Lng),]
+crime2008=crimedfonly[crimedfonly$beginyear==2008,]
+levels(crime2008$OFFGEN)
+leaflet(data=crime2008)%>%addTiles()%>%addCircleMarkers(color =~pal(OFFGEN),popup=~LOCATION)
 ```
 
 
