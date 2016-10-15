@@ -1,0 +1,69 @@
+---
+title: "Spokane Crime Data"
+output: html_document
+---
+
+```{r setup}
+
+```
+
+This walkthrough shows the steps needed to convert the Spokane Crime Data into a final dataset that is suitable for analysis. The R code is based on the `basecode.R` script by @kmigori. 
+
+
+## Raw data files
+
+The raw data is contained in two .zip archives - Crime.zip and Neighborhood.zip. The files can be downloaded manually using these links: 
+
+[https://static.spokanecity.org/download/gistransfer/pubdata/Crime.zip](https://static.spokanecity.org/download/gistransfer/pubdata/Crime.zip)  
+[https://static.spokanecity.org/download/gistransfer/pubdata/Neighborhood.zip](https://static.spokanecity.org/download/gistransfer/pubdata/Neighborhood.zip)  
+
+Alternatively, you can enter the following into the R console. 
+
+```{r, echo = TRUE, eval = FALSE}
+library(httr)  
+crime_url <- "https://static.spokanecity.org/download/gistransfer/pubdata/Crime.zip"  
+neighborhood_url <- "https://static.spokanecity.org/download/gistransfer/pubdata/Neighborhood.zip"  
+
+GET(crime_url, write_disk("Data/Crime.zip", overwrite=FALSE))  
+GET(neighborhood_url, write_disk("Data/Neighborhood.zip", overwrite=TRUE))  
+
+
+```  
+
+Either way, the .zip files should be saved in the /Data folder in the repository's root directory.
+
+
+## Inspect the .zip archive
+
+The resulting .zip archives can be inspected and unzipped manually, or at the R console using this code. 
+
+
+```{r inspect zip, echo = TRUE, eval = TRUE, comment = ""}
+unzip("Data/Crime.zip", list = TRUE)
+unzip("Data/Neighborhood.zip", list = TRUE)
+```
+
+
+## Load the data
+
+This is where Kristian's code comes into play. It has been modified slightly to account for the data files being saved in the /Data directory. 
+
+```{r load shape, echo = TRUE, eval = TRUE}
+#this is an R script to import Spokane City crime data, merge it with Neighborhoods, and export it as a flat file
+rm(list=ls())
+library(rgdal)
+library(maptools)
+
+#reading in Crime shapefile
+Crime=readOGR(dsn="Data/Crime",layer="Crime")
+#reading in Neighborhood shapefile
+Neighborhood=readOGR(dsn="Data/Neighborhood",layer="Neighborhood")
+
+#Extracting Neighborhood designation for each point by location
+Crime_byNeighborhood=over(Crime,Neighborhood)
+#appending rest of data to each point
+Crime_byNeighborhood=spCbind(Crime,Crime_byNeighborhood)
+#saving resulting dataset as csv
+write.csv(file="Data/Spokane_CrimeData_Neighborhood.csv",Crime_byNeighborhood)
+```
+
