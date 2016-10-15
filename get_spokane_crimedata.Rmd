@@ -37,23 +37,10 @@ Either way, the .zip files should be saved in the /Data folder in the repository
 
 The resulting .zip archives can be inspected and unzipped manually, or at the R console using this code. 
 
-```{r, echo = TRUE, eval = FALSE}
+
+```{r inspect zip, echo = TRUE, eval = TRUE, comment = ""}
 unzip("Data/Crime.zip", list = TRUE)
 unzip("Data/Neighborhood.zip", list = TRUE)
-
-unzip("Data/Crime.zip", exdir = "Data/Crime")
-unzip("Data/Neighborhood.zip", exdir = "Data/Neighborhood")
-
-```
-
-
-```{r inspect zip, echo = FALSE, eval = TRUE, comment = ""}
-unzip("../Data/Crime.zip", list = TRUE)
-
-unzip("../Data/Neighborhood.zip", list = TRUE)
-
-#unzip"../Data/Crime.zip", exdir = "Data/Crime")
-#unzip"../Data/Neighborhood.zip", exdir = "Data/Neighborhood")
 ```
 
 
@@ -61,7 +48,7 @@ unzip("../Data/Neighborhood.zip", list = TRUE)
 
 This is where Kristian's code comes into play. It has been modified slightly to account for the data files being saved in the /Data directory. 
 
-```{r load shape, echo = TRUE, eval = FALSE}
+```{r load shape, echo = TRUE, eval = TRUE}
 #this is an R script to import Spokane City crime data, merge it with Neighborhoods, and export it as a flat file
 rm(list=ls())
 library(rgdal)
@@ -76,7 +63,27 @@ Neighborhood=readOGR(dsn="Data/Neighborhood",layer="Neighborhood")
 Crime_byNeighborhood=over(Crime,Neighborhood)
 #appending rest of data to each point
 Crime_byNeighborhood=spCbind(Crime,Crime_byNeighborhood)
+
+# Shows that we are using Lambert, conformoconic coordinates
+proj4string(Crime_byNeighborhood)   
+
+# Remove incorrect coordinates
+mean(is.na(Crime_byNeighborhood$Lat))
+Crime_byNeighborhood <- Crime_byNeighborhood[!is.na(Crime_byNeighborhood$Lat) | !is.na(Crime_byNeighborhood$Lng),]
+
+# Removing bad lat/lng
+Crime_byNeighborhood@data <- Crime_byNeighborhood@data[,1:6]
+
+# Transform lcc coordinates into lat/lng and remove old latlong
+Crime_byNeighborhood@data <- cbind(
+  Crime_byNeighborhood@data,
+  coordinates(spTransform(Crime_byNeighborhood,CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")))
+)
+names(Crime_byNeighborhood@data)[7:8] <- c("Lng","Lat")
+
+
 #saving resulting dataset as csv
 write.csv(file="Data/Spokane_CrimeData_Neighborhood.csv",Crime_byNeighborhood)
+
 ```
 
