@@ -63,7 +63,27 @@ Neighborhood=readOGR(dsn="Data/Neighborhood",layer="Neighborhood")
 Crime_byNeighborhood=over(Crime,Neighborhood)
 #appending rest of data to each point
 Crime_byNeighborhood=spCbind(Crime,Crime_byNeighborhood)
+
+# Shows that we are using Lambert, conformoconic coordinates
+proj4string(Crime_byNeighborhood)   
+
+# Remove incorrect coordinates
+mean(is.na(Crime_byNeighborhood$Lat))
+Crime_byNeighborhood <- Crime_byNeighborhood[!is.na(Crime_byNeighborhood$Lat) | !is.na(Crime_byNeighborhood$Lng),]
+
+# Removing bad lat/lng
+Crime_byNeighborhood@data <- Crime_byNeighborhood@data[,1:6]
+
+# Transform lcc coordinates into lat/lng and remove old latlong
+Crime_byNeighborhood@data <- cbind(
+  Crime_byNeighborhood@data,
+  coordinates(spTransform(Crime_byNeighborhood,CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")))
+)
+names(Crime_byNeighborhood@data)[7:8] <- c("Lng","Lat")
+
+
 #saving resulting dataset as csv
 write.csv(file="Data/Spokane_CrimeData_Neighborhood.csv",Crime_byNeighborhood)
+
 ```
 
