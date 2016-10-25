@@ -7,6 +7,7 @@ library(maps)
 library(ggmap)
 library(lubridate)
 library(dplyr)
+library(ggplot2)
 
 # Produce a scatterplot with crime colored by offense type for each year
 # ======================================================================
@@ -18,18 +19,18 @@ Crime_byNeighborhood <- read.csv('Data/Spokane_CrimeData_Neighborhood.csv')   # 
 #police <- read.csv('../Data/spokanepolicestations.csv')                 # Read in police station locations
 police <- data.frame(lat=c(47.665534),lng=c(-117.429014))
 
-crime <- tbl_df(data.frame(Crime_byNeighborhood)) %>%                    # Convert to local dataframe for easy printing
+crime <- tbl_df(Crime_byNeighborhood) %>%                    # Convert to local dataframe for easy printing
   mutate(BEGINDATE = as.Date(BEGINDATE,format="%Y/%m/%d"),               # Date conversion
          ENDDATE = as.Date(ENDDATE,format="%Y/%m/%d"),
          year = year(BEGINDATE))                                         # Extract year
 
-ggplot() + geom_point(data=crime %>%                                     # 
+spokane_location <- c(-117.402209,47.665330)
+spokane_map <- get_map(spokane_location,source="osm", color="bw",zoom=11)
+
+ggmap(spokane_map) + geom_point(data=crime %>%                                     
                         filter(year>2007) %>% 
-                        sample_n(20000),
-                      aes(longitude,latitude,colour=OFFGEN)) + 
+                        sample_n(2000),
+                      aes(Lng,Lat,colour=OFFGEN)) + 
   geom_point(data=police,aes(lng,lat),colour="black",size=2) + 
   facet_wrap(~year)
-
-
-ggplot() +geom_point(data=crime %>% filter(year>2007) %>% sample_n(200),aes(coords.x1,coords.x2,colour=OFFGEN)) + facet_wrap(~year)
 ```
