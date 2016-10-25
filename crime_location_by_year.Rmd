@@ -23,14 +23,6 @@ crime <- tbl_df(data.frame(Crime_byNeighborhood)) %>%                    # Conve
          ENDDATE = as.Date(ENDDATE,format="%Y/%m/%d"),
          year = year(BEGINDATE))                                         # Extract year
 
-lm.lng <- lm(Lng~coords.x1,data=crime %>%                                # Linear models to convert x/y to lat/long (change)
-               filter(!is.na(Lat),!is.na(Lng)))
-lm.lat <- lm(Lat~coords.x2,data=crime %>% 
-               filter(!is.na(Lat),!is.na(Lng)))
-
-crime <- crime %>% mutate(Lat=predict(lm.lat,newdata=crime),             # Use predict to update lat/long
-                 Lng=predict(lm.lng,newdata=crime))
-
 ggplot() + geom_point(data=crime %>%                                     # 
                         filter(year>2007) %>% 
                         sample_n(20000),
