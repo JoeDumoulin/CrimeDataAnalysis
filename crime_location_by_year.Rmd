@@ -10,7 +10,7 @@ library(dplyr)
 
 # Produce a scatterplot with crime colored by offense type for each year
 # ======================================================================
-Crime_byNeighborhood <- read.csv('../Data/Spokane_CrimeData_Neighborhood.csv')   # Read in the data
+Crime_byNeighborhood <- read.csv('Data/Spokane_CrimeData_Neighborhood.csv')   # Read in the data
                                                                          # This will be updated
                                                                          # when ezknitr is
                                                                          # included
