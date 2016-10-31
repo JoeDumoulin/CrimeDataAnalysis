@@ -16,8 +16,7 @@ Crime_byNeighborhood <- read.csv('Data/Spokane_CrimeData_Neighborhood.csv')   # 
                                                                          # when ezknitr is
                                                                          # included
 
-#police <- read.csv('../Data/spokanepolicestations.csv')                 # Read in police station locations
-police <- data.frame(lat=c(47.665534),lng=c(-117.429014))
+police <- read.csv("Data/spokanepolicestations.csv")                     # Read in police station locations
 
 crime <- tbl_df(Crime_byNeighborhood) %>%                    # Convert to local dataframe for easy printing
   mutate(BEGINDATE = as.Date(BEGINDATE,format="%Y/%m/%d"),               # Date conversion
@@ -31,6 +30,6 @@ ggmap(spokane_map) + geom_point(data=crime %>%
                         filter(year>2007) %>% 
                         sample_n(2000),
                       aes(Lng,Lat,colour=OFFGEN)) + 
-  geom_point(data=police,aes(lng,lat),colour="black",size=2) + 
+  geom_point(data=police,aes(Lng,Lat),colour="black",size=2) + 
   facet_wrap(~year)
 ```
